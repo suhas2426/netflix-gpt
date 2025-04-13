@@ -7,9 +7,9 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { USER_AVATAR } from "../utils/constant";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -17,7 +17,6 @@ const Login = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const nameRef = useRef(null);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleOnBtnClick = () => {
@@ -44,8 +43,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: nameRef.current.value,
-            photoURL:
-              "https://avatars.githubusercontent.com/u/94546020?s=400&v=4",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               // Profile updated!
@@ -59,7 +57,7 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              navigate("/browse");
+              // navigate("/browse");
             })
             .catch((error) => {
               const errorMessage = error.message;
@@ -67,7 +65,6 @@ const Login = () => {
             });
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
           setErrMsg(errorMessage);
         });
@@ -82,17 +79,14 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           //   once the user is signed in will push the userinfo onto the redux store for using it everwhere we need
-          console.log("sign in", user);
-          navigate("/browse");
+          // navigate("/browse")
         })
         .catch((error) => {
-          const errorCode = error.code;
           const errorMessage = error.message;
           setErrMsg(errorMessage);
         });
     }
   };
-
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
